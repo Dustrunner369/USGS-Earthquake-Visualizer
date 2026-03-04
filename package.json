@@ -1,0 +1,41 @@
+{
+  "name": "software-project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "server:dev": "nodemon server.js",
+    "client": "http-server -p 5500",
+    "dev": "concurrently \"npm run server:dev\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://mswift0023@bitbucket.org/PLNU_CSC323/sp25_p1_t3.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://bitbucket.org/PLNU_CSC323/sp25_p1_t3/issues"
+  },
+  "homepage": "https://bitbucket.org/PLNU_CSC323/sp25_p1_t3#readme",
+  "description": "",
+  "dependencies": {
+    "@auth0/auth0-spa-js": "^2.1.3",
+    "concurrently": "^8.2.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-jwt": "^8.5.1",
+    "http-server": "^14.1.1",
+    "jwks-rsa": "^3.1.0",
+    "mysql2": "^3.12.0",
+    "pg": "^8.13.2"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "http-server": "^14.1.1",
+    "nodemon": "^3.0.3"
+  }
+}

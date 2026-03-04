@@ -1,0 +1,199 @@
+body {
+   text-align: center;
+}
+canvas {
+   display: block;
+   width: 280px;
+   height: 210px;
+   margin: auto;
+   padding: 0;
+   border: none;
+   background-color: black;
+}
+button {
+   display: block;
+   font-size: inherit;
+   margin: auto;
+   padding: 0.6em;
+}
+
+/* Positioning for Mapbox Draw Controls*/
+/* Add these to your existing style section */
+.container {
+   display: flex;
+   gap: 20px;
+   max-width: 1620px;
+   margin: 0 auto;
+   height: calc(100vh - 40px);
+}
+.map-container {
+   flex: 0 0 720px;
+   height: 720px;
+   position: relative;
+}
+
+#map {
+   width: 720px;
+   height: 720px;
+   border: 25px solid #1e3d5c;
+   border-radius: 15px;
+   box-sizing: border-box;
+   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+.mapboxgl-ctrl-top-left {
+   top: 70px !important;
+}
+.mapboxgl-ctrl-top-right {
+   top: 70px !important;
+}
+/* Style for the selection area */
+.mapbox-gl-draw_polygon {
+   background-color: rgba(66, 133, 244, 0.3) !important;
+   border: 2px solid #4285f4 !important;
+}
+.mapbox-gl-draw_rectangle {
+   background-color: rgba(66, 133, 244, 0.3) !important;
+   border: 2px solid #4285f4 !important;
+}
+/* Make sure draw controls are visible */
+.mapboxgl-ctrl-group {
+   background: #fff !important;
+}
+.mapboxgl-ctrl-group button {
+   background-color: rgba(0, 0, 0, 0.05) !important;
+   border: 1px solid #ccc !important;
+}
+/* Drawing tool button icons */
+.mapbox-gl-draw_ctrl-draw-btn.mapbox-gl-draw_polygon {
+   background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 11h4V7H3v4zm0 6h4v-4H3v4zm4 6h4v-4H7v4zm6-12h4V7h-4v4zm0 6h4v-4h-4v4zm-6 0h4v-4H7v4zm12-6h4V7h-4v4zm0 6h4v-4h-4v4z" fill="white"/></svg>') !important;
+   background-position: center !important;
+   background-repeat: no-repeat !important;
+   background-size: 70% !important;
+}
+
+.mapbox-gl-draw_ctrl-draw-btn.mapbox-gl-draw_trash {
+   background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" fill="white"/></svg>') !important;
+   background-position: center !important;
+   background-repeat: no-repeat !important;
+   background-size: 70% !important;
+}
+/* Add this to your CSS */
+.active-tool {
+   background: #2db14f !important;
+   box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+#cluster-radius {
+   padding: 8px;
+   border-radius: 5px;
+   font-size: 14px;
+   background-color: #2e4d6c;
+   color: white;
+   border: 2px solid #4a6d8c;
+}
+
+#cluster-radius-value {
+   color: white;
+   font-size: 14px;
+   margin-left: 10px;
+}
+
+/* Base slider styles */
+input[type="range"] {
+   -webkit-appearance: none;
+   appearance: none;
+   width: 100%;
+   height: 8px;
+   background: #4a6d8c;
+   border-radius: 4px;
+   outline: none;
+   margin: 10px 0;
+}
+
+/* Thumb styles for Webkit (Chrome, Safari, etc.) */
+input[type="range"]::-webkit-slider-thumb {
+   -webkit-appearance: none;
+   appearance: none;
+   width: 20px;
+   height: 20px;
+   background: #34c759;
+   border-radius: 50%;
+   cursor: pointer;
+   transition: background 0.3s ease;
+}
+
+/* Thumb styles for Firefox */
+input[type="range"]::-moz-range-thumb {
+   width: 20px;
+   height: 20px;
+   background: #34c759;
+   border: none;
+   border-radius: 50%;
+   cursor: pointer;
+   transition: background 0.3s ease;
+}
+
+/* Thumb styles for IE/Edge */
+input[type="range"]::-ms-thumb {
+   width: 20px;
+   height: 20px;
+   background: #34c759;
+   border: none;
+   border-radius: 50%;
+   cursor: pointer;
+   transition: background 0.3s ease;
+}
+
+/* Track styles for Firefox */
+input[type="range"]::-moz-range-track {
+   width: 100%;
+   height: 8px;
+   background: #4a6d8c;
+   border-radius: 4px;
+}
+
+/* Track styles for IE/Edge */
+input[type="range"]::-ms-track {
+   width: 100%;
+   height: 8px;
+   background: transparent;
+   border-color: transparent;
+   color: transparent;
+}
+
+input[type="range"]::-ms-fill-lower {
+   background: #4a6d8c;
+   border-radius: 4px;
+}
+
+input[type="range"]::-ms-fill-upper {
+   background: #4a6d8c;
+   border-radius: 4px;
+}
+
+/* Hover states */
+input[type="range"]::-webkit-slider-thumb:hover {
+   background: #2db14f;
+}
+
+input[type="range"]::-moz-range-thumb:hover {
+   background: #2db14f;
+}
+
+input[type="range"]::-ms-thumb:hover {
+   background: #2db14f;
+}
+
+/* Focus styles */
+input[type="range"]:focus {
+   outline: none;
+}
+
+/* Display value styling */
+#cluster-radius-value {
+   color: white;
+   font-size: 14px;
+   margin-left: 10px;
+   display: inline-block;
+   min-width: 30px;
+}
