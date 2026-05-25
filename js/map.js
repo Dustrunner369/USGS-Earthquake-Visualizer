@@ -1,17 +1,25 @@
 
-
-mapboxgl.accessToken = process.env.MAPBOX_KEY;
-
-const map = new mapboxgl.Map({
-   container: "map",
-   style: "mapbox://styles/mapbox/streets-v12",
-   center: [0, 20],
-   zoom: 2,
-});
-
-map.addControl(new mapboxgl.NavigationControl());
-
+let map;
 let draw;
+
+async function initMap() {
+   // Fetch the Mapbox key from the server config
+   const response = await fetch('/config');
+   const cfg = await response.json();
+   mapboxgl.accessToken = cfg.mapboxKey;
+
+   map = new mapboxgl.Map({
+      container: "map",
+      style: "mapbox://styles/mapbox/streets-v12",
+      center: [0, 20],
+      zoom: 2,
+   });
+
+   map.addControl(new mapboxgl.NavigationControl());
+
+   return map;
+}
+
 
 function updateAreaSelection(e) {
    const data = draw.getAll();
@@ -505,6 +513,7 @@ const FourPointPolygon = {
    },
 };
 
+initMap().then(() => {
 map.on("load", () => {
    loadSQLData();
 
@@ -564,3 +573,4 @@ map.on("load", () => {
    map.on("draw.delete", updateAreaSelection);
    map.on("draw.update", updateAreaSelection);
 });
+}); // end initMap().then()

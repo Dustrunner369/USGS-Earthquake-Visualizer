@@ -16,12 +16,16 @@ const pgPool = new Pool({
   }
 });
 
+// Track DB availability
+let dbAvailable = false;
+
 // Test database connection
 pgPool.connect((err, client, release) => {
   if (err) {
-    console.error('Error connecting to the database:', err);
+    console.warn('PostgreSQL unavailable — preferences will be disabled:', err.message);
   } else {
     console.log('Successfully connected to PostgreSQL database');
+    dbAvailable = true;
     release();
   }
 });
@@ -68,6 +72,10 @@ const pool = mysql.createPool({
 
 //Initialize Database
 const initializeDatabase = async () => {
+  if (!dbAvailable) {
+    console.warn('Skipping database initialization — PostgreSQL is unavailable');
+    return;
+  }
   try {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS user_preferences (
@@ -113,8 +121,11 @@ app.get('/data.sql', async (req, res) => {
 
 // Protected Routes - User Preferences
 app.get('/api/preferences', jwtCheck, async (req, res) => {
+  if (!dbAvailable) {
+    return res.json({});
+  }
   const userId = req.auth.sub;
-  
+
   try {
     const result = await pgPool.query(
       'SELECT * FROM user_preferences WHERE user_id = $1',
@@ -128,12 +139,15 @@ app.get('/api/preferences', jwtCheck, async (req, res) => {
 });
 
 app.post('/api/preferences', jwtCheck, async (req, res) => {
+  if (!dbAvailable) {
+    return res.status(503).json({ error: 'Database unavailable — preferences cannot be saved at this time' });
+  }
   const userId = req.auth.sub;
   const { startTime, endTime, minMagnitude, maxMagnitude, minDepth, maxDepth, maxEarthquakes } = req.body;
 
   try {
     const query = `
-      INSERT INTO user_preferences 
+      INSERT INTO user_preferences
       (user_id, start_time, end_time, min_magnitude, max_magnitude, min_depth, max_depth, max_earthquakes)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       ON CONFLICT (user_id) DO UPDATE SET
@@ -149,13 +163,13 @@ app.post('/api/preferences', jwtCheck, async (req, res) => {
     `;
 
     const result = await pgPool.query(query, [
-      userId, 
-      startTime, 
-      endTime, 
-      minMagnitude, 
-      maxMagnitude, 
-      minDepth, 
-      maxDepth, 
+      userId,
+      startTime,
+      endTime,
+      minMagnitude,
+      maxMagnitude,
+      minDepth,
+      maxDepth,
       maxEarthquakes
     ]);
 
@@ -167,7 +181,6 @@ app.post('/api/preferences', jwtCheck, async (req, res) => {
   }
 });
 
-// Generic Error Handling Middleware
 // Generic Error Handling Middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -183,11 +196,6 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Catch-all route should be LAST
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
-
 // Start Server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
@@ -196,19 +204,14 @@ app.listen(PORT, async () => {
 });
 
 // Handle graceful shutdown
-process.on('SIGTERM', () => {
+process.on('SIGTERM', async () => {
   console.log('SIGTERM signal received: closing HTTP server');
+  if (dbAvailable) {
+    await pgPool.end();
+    console.log('PostgreSQL pool has ended');
+  }
   pool.end(() => {
-    console.log('Database pool has ended');
-    process.exit(0);
-  });
-});
-
-// Handle graceful shutdown
-process.on('SIGTERM', () => {
-  console.log('SIGTERM signal received: closing HTTP server');
-  pool.end(() => {
-    console.log('Database pool has ended');
+    console.log('MySQL pool has ended');
     process.exit(0);
   });
 });
