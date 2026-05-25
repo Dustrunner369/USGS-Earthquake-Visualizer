@@ -4,11 +4,9 @@ An interactive web application that visualizes earthquake data from the USGS on 
 
 ## Tech Stack
 
-- **Frontend:** HTML/CSS/JS, Mapbox GL JS, Turf.js
+- **Frontend:** HTML/CSS/JS, Mapbox GL JS
 - **Backend:** Node.js, Express
-- **Database:** PostgreSQL, MySQL
-- **Auth:** Auth0
-- **Hosting:** Render
+- **Database:** PostgreSQL
 
 ## Getting Started
 
